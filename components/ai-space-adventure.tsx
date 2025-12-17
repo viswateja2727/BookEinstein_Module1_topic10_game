@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Rocket, Trophy, RotateCcw, Play, Star, Heart } from "lucide-react"
+import { Trophy, RotateCcw, Play, Star, Heart } from "lucide-react"
 
 const AISpaceAdventure = () => {
   const [gameState, setGameState] = useState("menu")
@@ -228,7 +228,7 @@ const AISpaceAdventure = () => {
       ...prev,
       {
         id: Date.now(),
-        x: spaceshipPos,
+        x: spaceshipPos + 3,
         y: 70,
       },
     ])
@@ -460,35 +460,35 @@ const AISpaceAdventure = () => {
 
   if (gameState === "playing") {
     return (
-      <div className="h-screen bg-gradient-to-b from-blue-400 via-blue-500 to-blue-600 overflow-hidden relative">
-        {/* Animated sky background with clouds */}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                           radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%)`,
-          }}
-        />
-
-        {/* Moving clouds */}
-        <div className="absolute inset-0 overflow-hidden">
-          {Array.from({ length: 5 }).map((_, i) => (
+      <div className="h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black overflow-hidden relative">
+        {/* Animated space background with stars */}
+        <div className="absolute inset-0">
+          {/* Twinkling stars */}
+          {Array.from({ length: 50 }).map((_, i) => (
             <div
-              key={`cloud-${i}`}
-              className="absolute bg-white rounded-full opacity-60"
+              key={`star-${i}`}
+              className="absolute bg-white rounded-full animate-pulse"
               style={{
-                width: Math.random() * 150 + 100 + "px",
-                height: Math.random() * 60 + 40 + "px",
-                left: `-${Math.random() * 30}%`,
-                top: Math.random() * 60 + "%",
-                animation: `float ${Math.random() * 40 + 30}s linear infinite`,
-                animationDelay: Math.random() * 10 + "s",
+                width: Math.random() * 3 + 1 + "px",
+                height: Math.random() * 3 + 1 + "px",
+                left: Math.random() * 100 + "%",
+                top: Math.random() * 100 + "%",
+                animationDuration: Math.random() * 3 + 2 + "s",
+                animationDelay: Math.random() * 2 + "s",
+                opacity: Math.random() * 0.7 + 0.3,
               }}
-            >
-              <div className="absolute bg-white rounded-full w-16 h-16 -top-6 left-8 opacity-80" />
-              <div className="absolute bg-white rounded-full w-20 h-20 -top-8 left-20 opacity-80" />
-            </div>
+            />
           ))}
+
+          {/* Nebula effects */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 20% 30%, rgba(100, 60, 200, 0.1) 0%, transparent 50%),
+                               radial-gradient(circle at 80% 70%, rgba(200, 50, 120, 0.1) 0%, transparent 50%),
+                               radial-gradient(circle at 50% 50%, rgba(30, 80, 180, 0.08) 0%, transparent 60%)`,
+            }}
+          />
         </div>
 
         <style>{`
@@ -497,8 +497,16 @@ const AISpaceAdventure = () => {
             to { transform: translateX(120vw); }
           }
           @keyframes magnetPulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 0.8; }
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.15); opacity: 0.9; }
+          }
+          @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+          }
+          @keyframes attractToShip {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(var(--attract-x), var(--attract-y)) scale(0.8); }
           }
         `}</style>
 
@@ -571,20 +579,69 @@ const AISpaceAdventure = () => {
           {fallingObjects.map((obj) => (
             <div
               key={obj.id}
-              className="absolute transition-all"
+              className="absolute"
               style={{ left: `${obj.x}%`, top: `${obj.y}%`, transform: "translateX(-50%)" }}
             >
               {/* Magnet attraction visual effect */}
               {magnetActive && obj.type === "ai" && (
-                <div
-                  className="absolute -inset-4 rounded-full bg-pink-400/30 animate-pulse"
-                  style={{ animation: "magnetPulse 1s infinite" }}
-                />
+                <>
+                  <svg
+                    className="absolute pointer-events-none"
+                    style={{
+                      left: "50%",
+                      top: "50%",
+                      width: "400px",
+                      height: "400px",
+                      transform: "translate(-50%, -50%)",
+                      overflow: "visible",
+                    }}
+                  >
+                    <line
+                      x1="200"
+                      y1="200"
+                      x2={200 + (spaceshipPos - obj.x) * 8}
+                      y2="350"
+                      stroke="rgba(236, 72, 153, 0.6)"
+                      strokeWidth="3"
+                      strokeDasharray="6,6"
+                      style={{
+                        filter: "drop-shadow(0 0 8px rgba(236, 72, 153, 0.8))",
+                      }}
+                    >
+                      <animate attributeName="stroke-dashoffset" from="0" to="12" dur="0.5s" repeatCount="indefinite" />
+                    </line>
+                  </svg>
+                </>
               )}
-              <div
-                className={`bg-gradient-to-br ${obj.color} rounded-xl p-4 shadow-2xl border-2 border-white/30 transform hover:scale-110 transition-transform`}
-              >
-                <div className="text-4xl">{obj.emoji}</div>
+
+              {/* Removed square background boxes around icons, made items float with labels */}
+              <div className="flex flex-col items-center gap-2">
+                <div
+                  className="text-center"
+                  style={{
+                    fontSize: "50px",
+                    filter:
+                      obj.type === "ai"
+                        ? "drop-shadow(0 0 15px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 30px rgba(147, 51, 234, 0.6))"
+                        : "drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3))",
+                    transform: `rotate(${obj.y * 0.5}deg)`,
+                    animation: obj.type === "ai" ? "pulse 2s infinite" : "none",
+                  }}
+                >
+                  {obj.emoji}
+                </div>
+                <div
+                  className={`text-center font-bold px-3 py-1 rounded-full ${
+                    obj.type === "ai" ? "bg-white text-purple-700" : "bg-gray-700 text-white"
+                  }`}
+                  style={{
+                    fontSize: "16px",
+                    boxShadow:
+                      obj.type === "ai" ? "0 4px 15px rgba(147, 51, 234, 0.5)" : "0 4px 10px rgba(0, 0, 0, 0.3)",
+                  }}
+                >
+                  {obj.name}
+                </div>
               </div>
             </div>
           ))}
@@ -593,12 +650,17 @@ const AISpaceAdventure = () => {
           {powerUps.map((pu) => (
             <div
               key={pu.id}
-              className="absolute animate-pulse"
-              style={{ left: `${pu.x}%`, top: `${pu.y}%`, transform: "translateX(-50%)" }}
+              className="absolute flex items-center justify-center animate-pulse"
+              style={{
+                left: `${pu.x}%`,
+                top: `${pu.y}%`,
+                width: "60px",
+                height: "60px",
+                transform: "translateX(-50%)",
+                filter: "drop-shadow(0 0 30px rgba(255, 215, 0, 0.8))",
+              }}
             >
-              <div className={`bg-gradient-to-br ${pu.color} rounded-full p-3 shadow-2xl border-2 border-white`}>
-                <div className="text-3xl">{pu.emoji}</div>
-              </div>
+              <div className="text-4xl">{pu.emoji}</div>
             </div>
           ))}
 
@@ -628,22 +690,99 @@ const AISpaceAdventure = () => {
 
           {/* Spaceship */}
           <div
-            className="absolute transition-all duration-100"
+            className="absolute bottom-8 transition-all duration-100"
             style={{
               left: `${spaceshipPos}%`,
-              top: "75%",
-              transform: `translateX(-50%) ${spaceshipDirection === "left" ? "rotate(-15deg)" : spaceshipDirection === "right" ? "rotate(15deg)" : "rotate(0deg)"}`,
+              transform:
+                spaceshipDirection === "left"
+                  ? "rotate(-15deg)"
+                  : spaceshipDirection === "right"
+                    ? "rotate(15deg)"
+                    : "rotate(0deg)",
             }}
           >
-            {shields > 0 && (
-              <div className="absolute -inset-8 rounded-full bg-blue-400/30 animate-pulse border-2 border-blue-400" />
-            )}
             <div className="relative">
-              <Rocket
-                className="w-16 h-16 text-white drop-shadow-2xl"
-                style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.8))" }}
-              />
-              {laserPowerActive && <div className="absolute -inset-2 rounded-full bg-yellow-400/40 animate-pulse" />}
+              {shields > 0 && (
+                <div
+                  className="absolute -inset-8 rounded-full border-4 border-blue-400 animate-pulse"
+                  style={{ boxShadow: "0 0 40px rgba(59, 130, 246, 0.9)" }}
+                />
+              )}
+              {magnetActive && (
+                <div
+                  className="absolute -inset-10 rounded-full border-4 border-pink-400"
+                  style={{
+                    boxShadow: "0 0 60px rgba(236, 72, 153, 1)",
+                    animation: "magnetPulse 1s infinite",
+                  }}
+                />
+              )}
+              {laserPowerActive && (
+                <div className="absolute -inset-8 rounded-full border-4 border-yellow-400 animate-ping" />
+              )}
+
+              {/* Colorful gradient rocket with rotation */}
+              <div
+                className="relative transition-transform duration-150"
+                style={{
+                  transform:
+                    spaceshipDirection === "left"
+                      ? "rotate(-15deg)"
+                      : spaceshipDirection === "right"
+                        ? "rotate(15deg)"
+                        : "rotate(0deg)",
+                }}
+              >
+                <svg width="80" height="100" viewBox="0 0 80 100" className="drop-shadow-2xl">
+                  <defs>
+                    <linearGradient id="rocketGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style={{ stopColor: "#ef4444", stopOpacity: 1 }} />
+                      <stop offset="25%" style={{ stopColor: "#dc2626", stopOpacity: 1 }} />
+                      <stop offset="50%" style={{ stopColor: "#f87171", stopOpacity: 1 }} />
+                      <stop offset="75%" style={{ stopColor: "#ffffff", stopOpacity: 1 }} />
+                      <stop offset="100%" style={{ stopColor: "#fecaca", stopOpacity: 1 }} />
+                    </linearGradient>
+                    <linearGradient id="windowGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" style={{ stopColor: "#dbeafe", stopOpacity: 1 }} />
+                      <stop offset="100%" style={{ stopColor: "#93c5fd", stopOpacity: 1 }} />
+                    </linearGradient>
+                    <filter id="glow">
+                      <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                      <feMerge>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+
+                  {/* Rocket body */}
+                  <ellipse cx="40" cy="60" rx="18" ry="30" fill="url(#rocketGradient)" filter="url(#glow)" />
+
+                  {/* Rocket nose cone */}
+                  <path d="M 40 10 L 25 40 L 55 40 Z" fill="url(#rocketGradient)" filter="url(#glow)" />
+
+                  {/* Window */}
+                  <circle cx="40" cy="45" r="8" fill="url(#windowGradient)" />
+                  <circle cx="40" cy="45" r="6" fill="#bfdbfe" opacity="0.9" />
+
+                  {/* Left fin */}
+                  <path d="M 22 70 L 10 90 L 22 85 Z" fill="url(#rocketGradient)" filter="url(#glow)" />
+
+                  {/* Right fin */}
+                  <path d="M 58 70 L 70 90 L 58 85 Z" fill="url(#rocketGradient)" filter="url(#glow)" />
+
+                  {/* Flame */}
+                  <ellipse cx="40" cy="92" rx="12" ry="8" fill="#fbbf24" opacity="0.9">
+                    <animate attributeName="ry" values="8;12;8" dur="0.3s" repeatCount="indefinite" />
+                  </ellipse>
+                  <ellipse cx="40" cy="95" rx="8" ry="6" fill="#f59e0b" opacity="0.8">
+                    <animate attributeName="ry" values="6;10;6" dur="0.3s" repeatCount="indefinite" />
+                  </ellipse>
+                  <ellipse cx="40" cy="97" rx="5" ry="4" fill="#ef4444" opacity="0.7">
+                    <animate attributeName="ry" values="4;7;4" dur="0.3s" repeatCount="indefinite" />
+                  </ellipse>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
