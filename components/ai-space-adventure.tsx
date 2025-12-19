@@ -26,17 +26,17 @@ const AISpaceAdventure = () => {
 
   const aiTech = [
     { type: "ai", emoji: "💬", name: "Chatbot", points: 20, color: "from-blue-400 to-blue-600" },
-    { type: "ai", emoji: "🤖", name: "AI Robot", points: 25, color: "from-purple-400 to-purple-600" },
-    { type: "ai", emoji: "👁️", name: "Computer Vision", points: 25, color: "from-cyan-400 to-cyan-600" },
-    { type: "ai", emoji: "🎯", name: "Recommendation AI", points: 20, color: "from-pink-400 to-pink-600" },
+    { type: "ai", emoji: "🤖", name: "Robot", points: 25, color: "from-purple-400 to-purple-600" },
+    { type: "ai", emoji: "🖥️", name: "Computer Vision", points: 25, color: "from-cyan-400 to-cyan-600" },
+    { type: "ai", emoji: "📧", name: "Spam Detection", points: 20, color: "from-pink-400 to-pink-600" },
   ]
 
   const nonAITech = [
-    { type: "nonai", emoji: "💧", name: "Water Bottle", damage: 1, color: "from-gray-500 to-gray-700" },
+    { type: "nonai", emoji: "💡", name: "Bulb", damage: 1, color: "from-gray-500 to-gray-700" },
     { type: "nonai", emoji: "⏰", name: "Clock", damage: 1, color: "from-gray-500 to-gray-700" },
     { type: "nonai", emoji: "🛏️", name: "Bed", damage: 1, color: "from-gray-500 to-gray-700" },
-    { type: "nonai", emoji: "🪑", name: "Table", damage: 1, color: "from-gray-500 to-gray-700" },
-    { type: "nonai", emoji: "📋", name: "Board", damage: 1, color: "from-gray-500 to-gray-700" },
+    { type: "nonai", emoji: "🪑", name: "Chair", damage: 1, color: "from-gray-500 to-gray-700" },
+    { type: "nonai", emoji: "📋", name: "Paper", damage: 1, color: "from-gray-500 to-gray-700" },
   ]
 
   const powerUpTypes = [
@@ -339,14 +339,13 @@ const AISpaceAdventure = () => {
 
   if (gameState === "menu") {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-400 via-blue-500 to-blue-700 p-6 flex items-center justify-center overflow-hidden relative">
+      <div className="min-h-screen bg-gradient-to-br from-cyan-100 via-cyan-200 to-blue-300 p-6 flex items-center justify-center overflow-hidden relative">
         {/* Animated clouds and elements */}
         <div className="absolute inset-0 overflow-hidden">
-          {/* White fluffy clouds */}
           {Array.from({ length: 8 }).map((_, i) => (
             <div
               key={`cloud-${i}`}
-              className="absolute bg-white rounded-full opacity-80"
+              className="absolute bg-white/60 rounded-full opacity-70"
               style={{
                 width: Math.random() * 200 + 150 + "px",
                 height: Math.random() * 80 + 60 + "px",
@@ -356,15 +355,15 @@ const AISpaceAdventure = () => {
                 animationDelay: Math.random() * 5 + "s",
               }}
             >
-              <div className="absolute bg-white rounded-full w-20 h-20 -top-8 left-10 opacity-90" />
-              <div className="absolute bg-white rounded-full w-24 h-24 -top-10 left-24 opacity-90" />
+              <div className="absolute bg-white/60 rounded-full w-20 h-20 -top-8 left-10 opacity-90" />
+              <div className="absolute bg-white/60 rounded-full w-24 h-24 -top-10 left-24 opacity-90" />
             </div>
           ))}
 
           {/* Floating AI icons with glow */}
           <div
             className="absolute top-20 left-10 text-8xl animate-bounce drop-shadow-2xl"
-            style={{ animationDuration: "3s", filter: "drop-shadow(0 0 20px rgba(255,255,255,0.8))" }}
+            style={{ animationDuration: "3s", filter: "drop-shadow(0 0 20px rgba(6,182,212,0.5))" }}
           >
             🤖
           </div>
@@ -373,7 +372,7 @@ const AISpaceAdventure = () => {
             style={{
               animationDuration: "2.5s",
               animationDelay: "0.5s",
-              filter: "drop-shadow(0 0 20px rgba(255,255,255,0.8))",
+              filter: "drop-shadow(0 0 20px rgba(6,182,212,0.5))",
             }}
           >
             💬
@@ -383,7 +382,7 @@ const AISpaceAdventure = () => {
             style={{
               animationDuration: "2.8s",
               animationDelay: "1s",
-              filter: "drop-shadow(0 0 20px rgba(255,255,255,0.8))",
+              filter: "drop-shadow(0 0 20px rgba(6,182,212,0.5))",
             }}
           >
             👁️
@@ -393,7 +392,7 @@ const AISpaceAdventure = () => {
             style={{
               animationDuration: "3.2s",
               animationDelay: "0.3s",
-              filter: "drop-shadow(0 0 20px rgba(255,255,255,0.8))",
+              filter: "drop-shadow(0 0 20px rgba(6,182,212,0.5))",
             }}
           >
             🎯
@@ -407,40 +406,42 @@ const AISpaceAdventure = () => {
           }
         `}</style>
 
-        <div className="max-w-3xl bg-gradient-to-br from-purple-900/90 to-black/90 backdrop-blur rounded-3xl shadow-2xl p-8 text-center border-4 border-purple-500 relative z-10">
+        <div className="max-w-3xl bg-white rounded-3xl shadow-2xl p-8 text-center relative z-10">
           <div className="text-8xl mb-6 animate-bounce">🚀</div>
 
-          <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 mb-4">
-            AI SPACE QUEST
+          <h1 className="text-6xl font-bold mb-4">
+            <span className="text-gray-900">AI </span>
+            <span className="text-cyan-500">SPACE</span>
+            <span className="text-gray-900"> QUEST</span>
           </h1>
 
-          <p className="text-xl text-purple-200 mb-8">
+          <p className="text-xl text-gray-700 mb-8">
             Navigate your spaceship through the cosmos! Collect AI technologies and avoid non-AI debris!
           </p>
 
           <div className="grid md:grid-cols-3 gap-4 mb-8">
-            <div className="bg-gradient-to-br from-blue-600/50 to-purple-600/50 rounded-xl p-4 border-2 border-blue-400">
+            <div className="bg-gradient-to-br from-teal-400 to-teal-500 rounded-2xl p-6 text-white shadow-lg">
               <div className="text-4xl mb-2">🤖</div>
-              <h3 className="font-bold text-blue-200 mb-2">Collect AI Tech</h3>
-              <p className="text-sm text-blue-100">Chatbots, Robots, Vision & More!</p>
+              <h3 className="font-bold mb-2">Collect AI Tech</h3>
+              <p className="text-sm text-white/90">Chatbots, Robots, Vision & More!</p>
             </div>
 
-            <div className="bg-gradient-to-br from-red-600/50 to-orange-600/50 rounded-xl p-4 border-2 border-red-400">
+            <div className="bg-gradient-to-br from-pink-400 to-pink-500 rounded-2xl p-6 text-white shadow-lg">
               <div className="text-4xl mb-2">💥</div>
-              <h3 className="font-bold text-red-200 mb-2">Avoid Objects</h3>
-              <p className="text-sm text-red-100">Dodge everyday items or lose lives!</p>
+              <h3 className="font-bold mb-2">Avoid Objects</h3>
+              <p className="text-sm text-white/90">Dodge everyday items or lose lives!</p>
             </div>
 
-            <div className="bg-gradient-to-br from-yellow-600/50 to-orange-600/50 rounded-xl p-4 border-2 border-yellow-400">
+            <div className="bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-2xl p-6 text-white shadow-lg">
               <div className="text-4xl mb-2">⚡</div>
-              <h3 className="font-bold text-yellow-200 mb-2">Shoot Lasers</h3>
-              <p className="text-sm text-yellow-100">Destroy objects with SPACE!</p>
+              <h3 className="font-bold mb-2">Shoot Lasers</h3>
+              <p className="text-sm text-white/90">Destroy objects with SPACE!</p>
             </div>
           </div>
 
-          <div className="bg-purple-800/50 rounded-xl p-6 mb-6 border-2 border-purple-400">
-            <h3 className="font-bold text-purple-200 mb-3 text-lg">🎮 Controls</h3>
-            <div className="text-purple-100 space-y-2">
+          <div className="bg-gray-50 rounded-2xl p-6 mb-6 border border-gray-200">
+            <h3 className="font-bold text-gray-900 mb-3 text-lg">🎮 Controls</h3>
+            <div className="text-gray-700 space-y-2">
               <p>← → or A/D: Move Spaceship</p>
               <p>SPACEBAR: Fire Laser</p>
             </div>
@@ -448,7 +449,7 @@ const AISpaceAdventure = () => {
 
           <button
             onClick={startGame}
-            className="bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 text-white px-12 py-5 rounded-full text-2xl font-bold hover:shadow-2xl hover:shadow-purple-500/50 transform hover:scale-105 transition-all flex items-center gap-3 mx-auto border-4 border-white/30"
+            className="bg-cyan-500 hover:bg-cyan-600 text-white px-12 py-5 rounded-full text-2xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all flex items-center gap-3 mx-auto"
           >
             <Play className="w-8 h-8" />
             LAUNCH MISSION
@@ -460,7 +461,7 @@ const AISpaceAdventure = () => {
 
   if (gameState === "playing") {
     return (
-      <div className="h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black overflow-hidden relative">
+      <div className="h-screen bg-gradient-to-b from-indigo-900 via-purple-900 to-slate-900 overflow-hidden relative">
         {/* Animated space background with stars */}
         <div className="absolute inset-0">
           {/* Twinkling stars */}
