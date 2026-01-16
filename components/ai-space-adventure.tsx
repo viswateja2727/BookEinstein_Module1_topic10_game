@@ -21,6 +21,7 @@ const AISpaceAdventure = () => {
   const [bossHealth, setBossHealth] = useState(100)
   const [magnetActive, setMagnetActive] = useState(false)
   const [laserPowerActive, setLaserPowerActive] = useState(false)
+  const [powerUpSpawnCount, setPowerUpSpawnCount] = useState<Record<string, number>>({})
   const gameLoopRef = useRef<NodeJS.Timeout | null>(null)
   const keysPressed = useRef<Record<string, boolean>>({})
 
@@ -211,11 +212,27 @@ const AISpaceAdventure = () => {
   }
 
   const spawnPowerUp = () => {
-    const pu = powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)]
+    const spawnCounts = { ...powerUpSpawnCount }
+
+    // Find power-ups that haven't spawned yet this level
+    const unspawnedPowerUps = powerUpTypes.filter((pu) => !spawnCounts[pu.type])
+
+    let selectedPowerUp
+    if (unspawnedPowerUps.length > 0) {
+      // Prioritize spawning power-ups that haven't appeared yet
+      selectedPowerUp = unspawnedPowerUps[Math.floor(Math.random() * unspawnedPowerUps.length)]
+    } else {
+      // After all have spawned at least once, spawn any random power-up
+      selectedPowerUp = powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)]
+    }
+
+    spawnCounts[selectedPowerUp.type] = (spawnCounts[selectedPowerUp.type] || 0) + 1
+    setPowerUpSpawnCount(spawnCounts)
+
     setPowerUps((prev) => [
       ...prev,
       {
-        ...pu,
+        ...selectedPowerUp,
         id: Date.now() + Math.random(),
         x: Math.random() * 90 + 5,
         y: -10,
@@ -294,6 +311,7 @@ const AISpaceAdventure = () => {
     setBossHealth(100)
     showMessage("BOSS FIGHT! 👾", "boss")
     setFallingObjects([])
+    setPowerUpSpawnCount({})
   }
 
   const createParticles = (x: number, y: number, color: string) => {
@@ -330,6 +348,7 @@ const AISpaceAdventure = () => {
     setMagnetActive(false)
     setLaserPowerActive(false)
     setSpaceshipDirection("up")
+    setPowerUpSpawnCount({})
   }
 
   const endGame = () => {
@@ -436,6 +455,32 @@ const AISpaceAdventure = () => {
               <div className="text-4xl mb-2">⚡</div>
               <h3 className="font-bold mb-2">Shoot Lasers</h3>
               <p className="text-sm text-white/90">Destroy objects with SPACE!</p>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4 mb-8">
+            <div className="bg-gradient-to-br from-blue-300 to-blue-500 rounded-2xl p-6 text-white shadow-lg">
+              <div className="text-4xl mb-2">🛡️</div>
+              <h3 className="font-bold mb-2">Shield</h3>
+              <p className="text-sm text-white/90">Protect from 1 collision!</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-2xl p-6 text-white shadow-lg">
+              <div className="text-4xl mb-2">⚡</div>
+              <h3 className="font-bold mb-2">Laser Power</h3>
+              <p className="text-sm text-white/90">Fire 5 lasers at once!</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-purple-300 to-purple-500 rounded-2xl p-6 text-white shadow-lg">
+              <div className="text-4xl mb-2">⏱️</div>
+              <h3 className="font-bold mb-2">Slow Motion</h3>
+              <p className="text-sm text-white/90">Objects fall slower temporarily!</p>
+            </div>
+
+            <div className="bg-gradient-to-br from-pink-300 to-pink-500 rounded-2xl p-6 text-white shadow-lg">
+              <div className="text-4xl mb-2">🧲</div>
+              <h3 className="font-bold mb-2">AI Magnet</h3>
+              <p className="text-sm text-white/90">Auto-collect AI items nearby!</p>
             </div>
           </div>
 
