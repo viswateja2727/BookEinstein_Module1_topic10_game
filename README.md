@@ -1,4 +1,6 @@
-# Fix and interface
+# AI Space Quest
+
+**Project URL:** [AI Space Quest](https://v0-fix-and-interface.vercel.app/) (Click here to play)
 
 *Automatically synced with your [v0.app](https://v0.app) deployments*
 
